@@ -9,7 +9,7 @@ Function Combine {
 		if($line -match 'Roster:(.+?);'){
 
 			# Empty line
-			write-host
+			write-debug
 			
 			# Roster month line
 			$month = $Matches[1]
@@ -18,7 +18,7 @@ Function Combine {
 			$notes.clear()
 			
 			# Read monthly notes
-			write-host "Reading $($month) Notes"
+			write-debug "Reading $($month) Notes"
 			$ATCO = "D:\Users\cad\Documents\ShifTracker\$($month)ATCO.txt"
 			
 			$hasNoteFile = $False
@@ -32,9 +32,9 @@ Function Combine {
 					$notes[$sp[0]] += "$($sp[1]);"
 				}
 				
-				write-host "Processing $($month)"
+				write-debug "Processing $($month)"
 			}else{
-				write-host "$($ATCO) not found"
+				write-debug "$($ATCO) not found"
 			}
 
 		}elseif($line -match 'Name:.+?;([A-Z]{2});'){
@@ -54,9 +54,6 @@ Function Combine {
 					$line += $notes[$cs]
 				}
 			}
-			
-			# Debug
-			if ($cs -eq "GD"){write-host $line}
 		}
 		
 		Add-Content -Encoding ASCII -Path $betaRoster -Value $line

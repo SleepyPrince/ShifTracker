@@ -11,7 +11,7 @@ Function Dropbox {
 	)
 
 	# Load Token
-	if(-not($PSBoundParameters.ContainsKey('token')) -and $token){
+	if(-not($PSBoundParameters.ContainsKey('token'))){
 		$token = Get-Content .\token -Raw
 	}
 	$authorization = "Bearer $($token)"

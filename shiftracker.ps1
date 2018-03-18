@@ -4,15 +4,8 @@ Get-Process pwsh | Where-Object {$_.MainWindowTitle -eq '' -and $_.Id -ne $pid} 
 # Load functions
 . ".\dropbox.ps1"
 . ".\ProcessExcel.ps1"
-
-function toLog {
-	Param ([String] $msg)
-
-	add-content $global:logFile $msg
-	if ($global:showDebug) {
-		Write-Debug $msg
-	}
-}
+. ".\Combine.ps1"
+. ".\toLog.ps1"
 
 function PendingUpdate {
     Param ($Event)
@@ -27,7 +20,7 @@ function PendingUpdate {
     if($name.contains('~') -eq $False -and $name.contains(".tmp") -eq $False){
 		
 		# Set next run in 2 mins
-		$global:nextUpdate = $time.AddMinutes(2)
+		$global:nextUpdate = $time.AddMinutes(3)
 		$global:pending = $true	
 		
 		# Log peding update time
@@ -111,10 +104,15 @@ while ($true) {
 		$global:pending = $false
 		
 		ProcessExcel "D:\Users\cad\Documents\ShifTracker\ExportTXT-8.1e.xls"
-
+		
+		toLog "$(Get-Date)`tIntegrating personal notes"
+		
+		Combine
+		
 		toLog "$(Get-Date)`tUploading files"
 
-		DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Rosters_new.txt" "/Server/STRostersData.txt"
+		#DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Rosters_new.txt" "/Server/STRostersData.txt"
+		DropBox "D:\Users\cad\Documents\ShifTracker\betaRoster.txt" "/Server/STRostersData.txt"
 		DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
 		
 		toLog "======================================================================"
