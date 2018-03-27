@@ -36,8 +36,8 @@ $global:showDebug = $False
 if($global:showDebug) { $DebugPreference = "Continue" }
 $folder = 'Z:\'
 $filter = '*.xlsx'
-$global:pending = $false
-$global:nextUpdate = (Get-Date).AddDays(1)
+$global:pending = $true
+$global:nextUpdate = (Get-Date).AddMinutes(3)
 $global:logFile = "pslog.txt"
 
 # Init fileSystemWatcher parameters
