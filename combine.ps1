@@ -1,6 +1,8 @@
 Function Combine {
 	$betaRoster = ".\betaRoster.txt"
-	Clear-Content -Path $betaRoster
+	if (Test-Path $betaRoster){
+		Clear-Content -Path $betaRoster
+	}
 	$roster = Get-Content -Encoding ASCII -Path "D:\Users\cad\Documents\ShifTracker\ATCapp_Rosters_new.txt" 
 
 	$month = $null
@@ -22,7 +24,7 @@ Function Combine {
 			$ATCO = "D:\Users\cad\Documents\ShifTracker\$($month)ATCO.txt"
 			
 			$hasNoteFile = $False
-			if ([System.IO.File]::Exists($ATCO)){
+			if (Test-Path $ATCO){
 				$hasNoteFile = $True
 				$notefile = Get-Content -Path $ATCO
 			
