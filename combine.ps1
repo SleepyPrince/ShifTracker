@@ -1,11 +1,16 @@
 Function Combine {
+
 	$betaRoster = ".\betaRoster.txt"
+	
 	if (Test-Path $betaRoster){
 		Clear-Content -Path $betaRoster
+	}else{
+		New-Item $betaRoster -ItemType file
 	}
-	
+	$betaRoster = (Resolve-Path $betaRoster)
+
 	# Output StreamWriter
-	$stream = [System.IO.StreamWriter] $betaRoster
+	$stream = [System.IO.StreamWriter]::new($betaRoster)
 	
 	# Read roster
 	$roster = Get-Content -Encoding ASCII -Path ".\ATCapp_Rosters_new.txt" 
@@ -35,7 +40,7 @@ Function Combine {
 			
 				# Read notes into hashtable
 				Foreach ($noteEntry in $notefile){
-					$sp = ($noteEntry -replace ';(?!$)',';- ').Split(";",2,[System.StringSplitOptions]::RemoveEmptyEntries)
+					$sp = ($noteEntry -replace ';(?!$|-)',';- ').Split(";",2,[System.StringSplitOptions]::RemoveEmptyEntries)
 					$notes[$sp[0]] += $sp[1]
 				}
 				
