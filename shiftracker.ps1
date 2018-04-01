@@ -20,7 +20,7 @@ function PendingUpdate {
     if($name.contains('~') -eq $False -and $name.contains(".tmp") -eq $False){
 		
 		# Set next run in 2 mins
-		$global:nextUpdate = $time.AddMinutes(3)
+		$global:nextUpdate = $time.AddMinutes(2)
 		$global:pending = $true	
 		
 		# Log peding update time
@@ -37,7 +37,7 @@ if($global:showDebug) { $DebugPreference = "Continue" }
 $folder = 'Z:\'
 $filter = '*.xlsx'
 $global:pending = $true
-$global:nextUpdate = (Get-Date).AddMinutes(3)
+$global:nextUpdate = (Get-Date).AddMinutes(2)
 $global:logFile = "pslog.txt"
 
 # Init fileSystemWatcher parameters
