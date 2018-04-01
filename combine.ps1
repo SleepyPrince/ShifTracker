@@ -3,7 +3,12 @@ Function Combine {
 	if (Test-Path $betaRoster){
 		Clear-Content -Path $betaRoster
 	}
-	$roster = Get-Content -Encoding ASCII -Path "D:\Users\cad\Documents\ShifTracker\ATCapp_Rosters_new.txt" 
+	
+	# Output StreamWriter
+	$stream = [System.IO.StreamWriter] $betaRoster
+	
+	# Read roster
+	$roster = Get-Content -Encoding ASCII -Path ".\ATCapp_Rosters_new.txt" 
 
 	$month = $null
 	$notes = @{}
@@ -11,7 +16,7 @@ Function Combine {
 		if($line -match 'Roster:(.+?);'){
 
 			# Empty line
-			write-debug
+			write-debug ""
 			
 			# Roster month line
 			$month = $Matches[1]
@@ -21,9 +26,9 @@ Function Combine {
 			
 			# Read monthly notes
 			write-debug "Reading $($month) Notes"
-			$ATCO = "D:\Users\cad\Documents\ShifTracker\$($month)ATCO.txt"
+			$ATCO = ".\$($month)ATCO.txt"
 			
-			$hasNoteFile = $False
+			# Read note file is exists
 			if (Test-Path $ATCO){
 				$hasNoteFile = $True
 				$notefile = Get-Content -Path $ATCO
@@ -31,11 +36,12 @@ Function Combine {
 				# Read notes into hashtable
 				Foreach ($noteEntry in $notefile){
 					$sp = ($noteEntry -replace ';(?!$)',';- ').Split(";",2,[System.StringSplitOptions]::RemoveEmptyEntries)
-					$notes[$sp[0]] += "$($sp[1]);"
+					$notes[$sp[0]] += $sp[1]
 				}
 				
 				write-debug "Processing $($month)"
 			}else{
+				$hasNoteFile = $False
 				write-debug "$($ATCO) not found"
 			}
 
@@ -57,7 +63,10 @@ Function Combine {
 				}
 			}
 		}
-		
-		Add-Content -Encoding ASCII -Path $betaRoster -Value $line
+		# Stream write to output
+		$stream.WriteLine($line)
 	}
+	
+	# Close output file
+	$stream.close()
 }
