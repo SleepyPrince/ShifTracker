@@ -16,22 +16,24 @@ Function Combine {
 	$roster = Get-Content -Encoding ASCII -Path ".\ATCapp_Rosters_new.txt" 
 
 	$month = $null
+	$year = $null
 	$notes = @{}
 	Foreach ($line in $roster){
-		if($line -match 'Roster:(.+?);'){
+		if($line -match 'Roster:(.+?);([0-9]{4});'){
 
 			# Empty line
 			write-debug ""
 			
 			# Roster month line
 			$month = $Matches[1]
+			$year = $Matches[2]
 			
 			# Clear notes
 			$notes.clear()
 			
 			# Read monthly notes
-			write-debug "Reading $($month) Notes"
-			$ATCO = ".\$($month)ATCO.txt"
+			write-debug "Reading $($month) $($year) Notes"
+			$ATCO = ".\$($year)$($month)ATCO.txt"
 			
 			# Read note file is exists
 			if (Test-Path $ATCO){
@@ -40,7 +42,7 @@ Function Combine {
 			
 				# Read notes into hashtable
 				Foreach ($noteEntry in $notefile){
-					$sp = ($noteEntry -replace ';(?!$|-)',';- ').Split(";",2,[System.StringSplitOptions]::RemoveEmptyEntries)
+					$sp = ($noteEntry -replace ';(?!$|-)\s?',';- ').Split(";",2,[System.StringSplitOptions]::RemoveEmptyEntries)
 					$notes[$sp[0]] += $sp[1]
 				}
 				
