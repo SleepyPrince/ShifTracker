@@ -47,7 +47,6 @@ $fsw.Filter = $filter
 $fsw.IncludeSubdirectories = $true
 $fsw.EnableRaisingEvents = $true
 
-
 # Clear previous change watchers
 Unregister-Event FileChanged -Erroraction 'silentlycontinue'
 Unregister-Event FileCreated -Erroraction 'silentlycontinue'
@@ -57,44 +56,52 @@ toLog "$(Get-Date)`tScript Started"
 
 # Monitor changes
 Register-ObjectEvent $fsw Changed -SourceIdentifier FileChanged -Action {
-	try{
-		PendingUpdate($Event)
-	}catch{
-		if ($_ -ne $null){
-			toLog "$(Get-Date)`tChanged Event Error: $($_)"
-		}else{
-			toLog "$(Get-Date)`tChanged Event Error"
-		}
-	}
+	endingUpdate($Event)
 } > $null
 
 Register-ObjectEvent $fsw Created -SourceIdentifier FileCreated -Action {
-	try{
-		PendingUpdate($Event)
-	}catch{
-		if ($_ -ne $null){
-			toLog "$(Get-Date)`tCreated Event Error: $($_)"
-		}else{
-			toLog "$(Get-Date)`tCreated Event Error"
-		}
-	}
+	PendingUpdate($Event)
 } > $null
 
 Register-ObjectEvent $fsw Renamed -SourceIdentifier FileRenamed -Action {
-	try{
-		PendingUpdate($Event)
-	}catch{
-		if ($_ -ne $null){
-			toLog "$(Get-Date)`tRenamed Event Error: $($_)"
-		}else{
-			toLog "$(Get-Date)`tRenamed Event Error"
-		}
-	}
+	PendingUpdate($Event)
 } > $null
 
 toLog "$(Get-Date)`tEvents Registered"
 
 while ($true) {
+	# Re-register events if Network drive is disconnected
+	If((Test-Path $folder) -ne $True){
+		toLog "$(Get-Date) Network drive disconnected"
+		
+		while ((Test-Path $folder) -ne $True){
+			# Wait 10s
+			Start-Sleep -Seconds 10
+		}
+		
+		toLog "$(Get-Date) Network drive back online"
+		
+		# Clear previous change watchers
+		Unregister-Event FileChanged -Erroraction 'silentlycontinue'
+		Unregister-Event FileCreated -Erroraction 'silentlycontinue'
+		Unregister-Event FileRenamed -Erroraction 'silentlycontinue'
+
+		# Monitor changes
+		Register-ObjectEvent $fsw Changed -SourceIdentifier FileChanged -Action {
+			endingUpdate($Event)
+		} > $null
+
+		Register-ObjectEvent $fsw Created -SourceIdentifier FileCreated -Action {
+			PendingUpdate($Event)
+		} > $null
+
+		Register-ObjectEvent $fsw Renamed -SourceIdentifier FileRenamed -Action {
+			PendingUpdate($Event)
+		} > $null
+
+		toLog "$(Get-Date)`tEvents Registered"
+	}
+	
 	# Loop every 1s
 	Start-Sleep -Seconds 1
 	
