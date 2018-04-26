@@ -21,7 +21,7 @@ function PendingUpdate {
 		
 		# Set next run in 2 mins
 		$global:nextUpdate = $time.AddMinutes(2)
-		$global:pending = $true	
+		$global:pending = $true
 		
 		# Log peding update time
 		toLog "$($time)`t$($type)`t$($name)"
@@ -100,6 +100,11 @@ while ($true) {
 		} > $null
 
 		toLog "$(Get-Date)`tEvents Registered"
+		
+		# Do an update in case file changes during network drive disconnect
+		$global:nextUpdate = (Get-Date)
+		$global:pending = $true
+		toLog "$(Get-Date)`tPending Update @ $($global:nextUpdate)"
 	}
 	
 	# Loop every 1s

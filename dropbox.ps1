@@ -26,6 +26,7 @@ Function Dropbox {
 	
 	# Get File Name
 	$name = Split-Path $SourceFilePath -leaf
+	$targetName = Split-Path $TargetFilePath -leaf
 	
 	# Check if toLog exists, if not use Write-Host instead
 	if (Get-Command toLog -errorAction SilentlyContinue)
@@ -39,12 +40,12 @@ Function Dropbox {
 	# Try to upload and write error if fail
 	try{
 		Invoke-RestMethod -Uri https://content.dropboxapi.com/2/files/upload -Method Post -InFile $SourceFilePath -Headers $headers > $null
-		toLog "$(Get-Date)`t$($name) uploaded successfully"
+		toLog "$(Get-Date)`t$($name) > $($targetName) uploaded successfully"
 	}catch{
 		if ($_ -ne $null){
-			toLog "$(Get-Date)`t$($name) upload failed: $($_)"
+			toLog "$(Get-Date)`t$($name) > $($targetName) upload failed: $($_)"
 		}else{
-			toLog "$(Get-Date)`t$($name) upload failed. (Reason unknown)"
+			toLog "$(Get-Date)`t$($name) > $($targetName) upload failed. (Reason unknown)"
 		}
 	}
 	
