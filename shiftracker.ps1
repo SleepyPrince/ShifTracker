@@ -72,14 +72,14 @@ toLog "$(Get-Date)`tEvents Registered"
 while ($true) {
 	# Re-register events if Network drive is disconnected
 	If((Test-Path $folder) -ne $True){
-		toLog "$(Get-Date) Network drive disconnected"
+		toLog "$(Get-Date)`tNetwork drive disconnected"
 		
 		while ((Test-Path $folder) -ne $True){
 			# Wait 10s
 			Start-Sleep -Seconds 10
 		}
 		
-		toLog "$(Get-Date) Network drive back online"
+		toLog "$(Get-Date)`tNetwork drive back online"
 		
 		# Clear previous change watchers
 		Unregister-Event FileChanged -Erroraction 'silentlycontinue'
