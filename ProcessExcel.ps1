@@ -1,6 +1,6 @@
 function ProcessExcel {
 	Param ([String] $filePath)
-	
+	$filePath = (Resolve-Path $filePath)
 	# Check if file exists
 	if ([System.IO.File]::Exists($filePath)){
 	
@@ -9,7 +9,6 @@ function ProcessExcel {
 		$excel.Visible = $False
 		$excel.ScreenUpdating = $False
 		$excel.DisplayAlerts = $False
-		#$filePath = "D:\Users\cad\Documents\ShifTracker\ExportTXT-8.1e.xls"
 		$workbook = $excel.Workbooks.Open($FilePath)
 		$excel.Visible = $false
 		
