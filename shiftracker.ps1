@@ -37,7 +37,7 @@ if($global:showDebug) { $DebugPreference = "Continue" }
 $folder = 'Z:\'
 $filter = '*.xlsx'
 $global:pending = $true
-$global:nextUpdate = (Get-Date).AddMinutes(2)
+$global:nextUpdate = (Get-Date).AddMinutes(0)
 $global:logFile = "pslog.txt"
 
 # Init fileSystemWatcher parameters
@@ -116,6 +116,7 @@ while ($true) {
 		$global:pending = $false
 		
 		ProcessExcel "D:\Users\cad\Documents\ShifTracker\ExportTXT-8.1e.xls"
+		ProcessExcel "D:\Users\cad\Documents\ShifTracker\v9\ExportTXT-9.xlsm"
 		
 		toLog "$(Get-Date)`tIntegrating personal notes"
 		
@@ -126,6 +127,7 @@ while ($true) {
 		DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Rosters_new.txt" "/Server/STRostersData_raw.txt"
 		DropBox "D:\Users\cad\Documents\ShifTracker\betaRoster.txt" "/Server/STRostersData.txt"
 		DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
+		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Rosters_new.txt" "/Server/STRostersData_v9.txt"
 		
 		toLog "======================================================================"
     }

@@ -10,6 +10,15 @@ Function Dropbox {
 		[string]$token
 	)
 
+	# Resolve path
+	$SourceFilePath = (Resolve-Path $SourceFilePath)
+	
+	# Check if input file exists
+	if (Test-Path $SourceFilePath -eq $False){
+		toLog "Input file $SourceFilePath not found"
+		return
+	}
+	
 	# Load Token
 	if(-not($PSBoundParameters.ContainsKey('token'))){
 		$token = Get-Content .\token -Raw
@@ -17,7 +26,7 @@ Function Dropbox {
 	$authorization = "Bearer $($token)"
 	
 	$arg = '{ "path": "' + $TargetFilePath + '", "mode": {".tag" : "overwrite"} }'
-
+	
 	# Dropbox Upload Headers
 	$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 	$headers.Add("Authorization", $authorization)
