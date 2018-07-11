@@ -19,8 +19,8 @@ function PendingUpdate {
 	# Skip Temp Files
     if($name.contains('~') -eq $False -and $name.contains(".tmp") -eq $False){
 		
-		# Set next run in 2 mins
-		$global:nextUpdate = $time.AddMinutes(2)
+		# Set next run in 30s
+		$global:nextUpdate = $time.AddSeconds(30)
 		$global:pending = $true
 		
 		# Log peding update time
@@ -115,19 +115,16 @@ while ($true) {
 		toLog "$(Get-Date)`tTask Started"
 		$global:pending = $false
 		
-		ProcessExcel "D:\Users\cad\Documents\ShifTracker\ExportTXT-8.1e.xls"
 		ProcessExcel "D:\Users\cad\Documents\ShifTracker\v9\ExportTXT-9.xlsm"
-		
-		toLog "$(Get-Date)`tIntegrating personal notes"
-		
-		Combine
+		ProcessExcel "D:\Users\cad\Documents\ShifTracker\v9.1\ExportTXT-9.xlsm"
 		
 		toLog "$(Get-Date)`tUploading files"
-
-		DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Rosters_new.txt" "/Server/STRostersData_raw.txt"
-		DropBox "D:\Users\cad\Documents\ShifTracker\betaRoster.txt" "/Server/STRostersData.txt"
-		DropBox "D:\Users\cad\Documents\ShifTracker\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
-		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Rosters_new.txt" "/Server/STRostersData_v9.txt"
+		
+		$logFile = "D:\Users\cad\Documents\ShifTracker\v9.1\log.txt"
+		
+		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
+		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Rosters_new.txt" "/Server/STRostersData.txt"
+		DropBox "D:\Users\cad\Documents\ShifTracker\v9.1\ATCapp_Rosters_new.txt" "/Server/STRostersData_v9.txt"
 		
 		toLog "======================================================================"
     }
