@@ -10,7 +10,7 @@ Function pushover {
 	. ".\pushtoken.ps1"	
 
 	$postParams = @{token=$pushoverToken;user=$pushoverUser;html=1;title=$title;message=$message}
-	#$progressPreference = 'silentlyContinue'
+	$progressPreference = 'silentlyContinue'
 	try {
 		$r = Invoke-WebRequest -Uri https://api.pushover.net/1/messages.json -Method POST -Body $postParams
 	} catch {
