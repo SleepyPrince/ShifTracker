@@ -8,8 +8,8 @@ $global:showDebug = $True
 
 toLog "$(Get-Date)`tManual task started"
 
-$xls = "D:\Users\cad\Documents\ShifTracker\v9\ExportTXT-9.xlsm", "D:\Users\cad\Documents\ShifTracker\v9.1\ExportTXT-9.xlsm"
-$xlsLog = "D:\Users\cad\Documents\ShifTracker\v9\log.txt", "D:\Users\cad\Documents\ShifTracker\v9.1\log.txt"
+$xls = @("D:\Users\cad\Documents\ShifTracker\v9\ExportTXT-9.xlsm")
+$xlsLog = @("D:\Users\cad\Documents\ShifTracker\v9\log.txt")
 
 for ($i=0 ; $i -lt $xls.Count ; $i++){
 	if ( -Not (ProcessExcel $xls[$i])[-1] ){

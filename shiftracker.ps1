@@ -115,8 +115,8 @@ while ($true) {
 		toLog "$(Get-Date)`tTask Started"
 		$global:pending = $false
 		
-		$xls = "D:\Users\cad\Documents\ShifTracker\v9\ExportTXT-9.xlsm", "D:\Users\cad\Documents\ShifTracker\v9.1\ExportTXT-9.xlsm"
-		$xlsLog = "D:\Users\cad\Documents\ShifTracker\v9\log.txt", "D:\Users\cad\Documents\ShifTracker\v9.1\log.txt"
+		$xls = @("D:\Users\cad\Documents\ShifTracker\v9\ExportTXT-9.xlsm")
+		$xlsLog = @("D:\Users\cad\Documents\ShifTracker\v9\log.txt")
 		
 		for ($i=0 ; $i -lt $xls.Count ; $i++){
 			if ( -Not (ProcessExcel $xls[$i])[-1] ){
@@ -138,7 +138,6 @@ while ($true) {
 		
 		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
 		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Rosters_new.txt" "/Server/STRostersData.txt"
-		DropBox "D:\Users\cad\Documents\ShifTracker\v9.1\ATCapp_Rosters_new.txt" "/Server/STRostersData_v9.txt"
 		
 		toLog "======================================================================"
     }
