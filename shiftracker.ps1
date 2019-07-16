@@ -3,6 +3,7 @@ Get-Process pwsh | Where-Object {$_.MainWindowTitle -eq '' -and $_.Id -ne $pid} 
 
 # Load functions
 . ".\dropbox.ps1"
+. ".\zip.ps1"
 . ".\ProcessExcel.ps1"
 . ".\toLog.ps1"
 . ".\pushover.ps1"
@@ -20,7 +21,7 @@ function PendingUpdate {
     if($name.contains('~') -eq $False -and $name.contains(".tmp") -eq $False){
 		
 		# Set next run in 30s
-		$global:nextUpdate = $time.AddSeconds(30)
+		$global:nextUpdate = $time.AddSeconds(60)
 		$global:pending = $true
 		
 		# Log peding update time
@@ -124,6 +125,11 @@ while ($true) {
 				$message = (get-content $xlslog[$i] -tail 11) -join '<br>'
 				$message = "$($xls[$i])<br>$message"
 				$title = "Roster conversion failed"
+				# Upload zip file
+				$zip = ZipRosters
+				if ($zip -ne ''){
+					DropBox $zip "/$($zip.split('\')[-1])"
+				}
 				if((pushover $title $message)){
 					toLog "$(Get-Date)`tAlert sent successfully"
 				}else{
@@ -131,6 +137,8 @@ while ($true) {
 				}
 			}else{
 				toLog "$(Get-Date)`t$($xls[$i]) Success"
+				Remove-Item D:\Users\cad\Documents\ShifTracker\*.zip
+				ZipRosters
 			}
 		}
 				
