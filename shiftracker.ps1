@@ -137,16 +137,16 @@ while ($true) {
 				}
 			}else{
 				toLog "$(Get-Date)`t$($xls[$i]) Success"
+				toLog "$(Get-Date)`tUploading files"
+		
+				DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
+				DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Rosters_new.txt" "/Server/STRostersData.txt"
+				
 				Remove-Item D:\Users\cad\Documents\ShifTracker\*.zip
 				ZipRosters
 			}
 		}
-				
-		toLog "$(Get-Date)`tUploading files"
-		
-		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Roster_Version.txt" "/Server/STRostersVersion.txt"
-		DropBox "D:\Users\cad\Documents\ShifTracker\v9\ATCapp_Rosters_new.txt" "/Server/STRostersData.txt"
-		
+	
 		toLog "======================================================================"
     }
 }
