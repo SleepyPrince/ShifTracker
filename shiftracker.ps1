@@ -21,7 +21,7 @@ function PendingUpdate {
     if($name.contains('~') -eq $False -and $name.contains(".tmp") -eq $False){
 		
 		# Set next run in 30s
-		$global:nextUpdate = $time.AddSeconds(60)
+		$global:nextUpdate = $time.AddSeconds(30)
 		$global:pending = $true
 		
 		# Log peding update time
